@@ -64,6 +64,10 @@ class Window(QWidget):
         self.weatherLabel.move(120, 282)
         self.weatherTextBox = QLineEdit(self)
         self.weatherTextBox.move(320, 280)
+        self.checkButton = QPushButton("CHECK", self)
+        self.checkButton.move(350, 280)
+        self.checkButton.clicked.connect(self.check_weather)
+        self.checkButton.setGeometry(527, 280, 80, 30)
 
         # For Lowest Cloud
         self.lstLabel = QLabel("Lowest Cloud (Octas) :", self)
@@ -116,6 +120,30 @@ class Window(QWidget):
 
         self.show()
 
+    # Check Weather Conditions
+    def check_weather(self):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setWindowTitle("WEATHER INFORMATION")
+        msg.setText("Please select the integer value which is alloted for weather conditions.")
+        msg.setInformativeText("Following Weather Conditions are \n 0 - Smoke (Fu)\n"
+                               " 1 - Haze (Hz)\n"
+                               " 2 - Mist (Br)\n"
+                               " 3 - Mist Fog (Mifg)\n"
+                               " 4 - Fog (Fg)\n"
+                               " 5 - Thunderstorm (Ts)\n"
+                               " 6 - Light Rain (Fbl Ra)\n"
+                               " 7 - Moderate Rain (Mod Ra)\n"
+                               " 8 - Light Thunderstorm and Rain (Fbl Tsra)\n"
+                               " 9 - Drizzle (Dz)\n"
+                               "10 - Rain (Ra)\n"
+                               "11 - Moderate Thunderstorm and Rain (Mod Tsra)\n"
+                               "12 - Light Drizzle (Fbl dz)\n"
+                               "13 - Fog Light Rain (Fg/ Fbl Ra)\n"
+                               "16 - Thunderstorm Rain (Tsra)")
+        msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        msg.exec_()
+
     # Action on Predict button click
     def on_click(self):
         self.__calculateRH()
@@ -154,7 +182,7 @@ class Window(QWidget):
     # Find prediction using machine learning model
     def __prediction(self):
         try:
-            filename = 'Model_V1.sav'
+            filename = 'Model_V2.h5'
             loaded_model = pickle.load(open(filename, 'rb'))
             ws = int(self.wsTextBox.text())
             vis = int(self.visibilityTextBox.text())
